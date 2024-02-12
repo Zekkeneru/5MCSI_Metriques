@@ -20,7 +20,7 @@
 
         data.results.forEach(result => {
           var date = new Date(result.Jour * 1000);
-          if (date.getMonth() === 1) { 
+          if (date.getMonth() === 1 && date.getFullYear() === 2024) { 
             dataTable.addRow([date, result.temp]);
           }
         });
@@ -31,8 +31,9 @@
           title: "Températures à Paris en Février",
           height: 350,
           calendar: {
-            cellSize: 20 // 
-          }
+            cellSize: 20, 
+          },
+          colorAxis: {colors: ['#3182bd', '#9ecae1', '#ffffbf', '#fd8d3c', '#e6550d']} 
         };
 
         chart.draw(dataTable, options);
@@ -43,49 +44,5 @@
     <div id="calendar_basic" style="width: 1000px; height: 350px;"></div>
   </body>
 </html>
-<html>
-  <head>
-    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-    <script type="text/javascript">
-      google.charts.load("current", {packages:["calendar"]});
-      google.charts.setOnLoadCallback(fetchDataAndDrawChart);
 
-      function fetchDataAndDrawChart() {
-        fetch('/paris/')
-          .then(response => response.json())
-          .then(data => {
-            drawChart(data);
-          });
-      }
-
-      function drawChart(data) {
-        var dataTable = new google.visualization.DataTable();
-        dataTable.addColumn({ type: 'date', id: 'Date' });
-        dataTable.addColumn({ type: 'number', id: 'Température' });
-
-        data.results.forEach(result => {
-          var date = new Date(result.Jour * 1000);
-          if (date.getMonth() === 1) { 
-            dataTable.addRow([date, result.temp]);
-          }
-        });
-
-        var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
-
-        var options = {
-          title: "Températures à Paris en Février",
-          height: 350,
-          calendar: {
-            cellSize: 20 // 
-          }
-        };
-
-        chart.draw(dataTable, options);
-      }
-    </script>
-  </head>
-  <body>
-    <div id="calendar_basic" style="width: 1000px; height: 350px;"></div>
-  </body>
-</html>
 
