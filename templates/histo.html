@@ -28,10 +28,18 @@
         var options = {
           title: "Températures à Paris",
           height: 350,
+          calendar: {
+            cellSize: 20, 
+          },
           colorAxis: {
-            minValue: data.results.reduce((min, result) => Math.min(min, result.temp), Infinity), 
+            minValue: data.results.reduce((min, result) => Math.min(min, result.temp), Infinity),e
             maxValue: data.results.reduce((max, result) => Math.max(max, result.temp), -Infinity), 
             colors: ['#c7e9b4', '#41b6c4'] 
+          },
+          legend: 'none', 
+          tooltip: { 
+            isHtml: true,
+            textStyle: { fontSize: 14 }
           }
         };
 
