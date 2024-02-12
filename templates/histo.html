@@ -1,42 +1,40 @@
-<head>
-    <meta charset="UTF-8" />
-    <title>Métrique</title>
+<html>
+  <head>
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
-</head>
-<body>
-    <div id="chart_div"></div>
-    <script>
-      google.charts.load('current', { packages: ['corechart'] });
-      google.charts.setOnLoadCallback(drawBackgroundColor);
-      function drawBackgroundColor() {
-        function drawChart(data) {
-          // Convertir les données récupérées en un tableau utilisable par Google Charts
-          var dataTable = new google.visualization.DataTable();
-          dataTable.addColumn('string', 'Date');
-          dataTable.addColumn('number', 'Valeur');
-          data.results.forEach(entry => {
-            var date = new Date(entry.Jour * 1000);
-            dataTable.addRow([date.toLocaleDateString(), entry.temp]);
-          });
+    <script type="text/javascript">
+      google.charts.load("current", {packages:["calendar"]});
+      google.charts.setOnLoadCallback(fetchDataAndDrawChart);
 
-          // Configurer les options du graphique en histogramme
-          var options = {
-            title: 'Évolution des températures de Paris pour les 16 prochains jours',
-            legend: { position: 'bottom' }
-          };
-
-          // Dessiner l'histogramme
-          var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
-          chart.draw(dataTable, options);
-        }
-
-        // Récupération de données depuis notre API /paris/
+      function fetchDataAndDrawChart() {
         fetch('/paris/')
           .then(response => response.json())
           .then(data => {
             drawChart(data);
-          })
+          });
+      }
+
+      function drawChart(data) {
+        var dataTable = new google.visualization.DataTable();
+        dataTable.addColumn({ type: 'date', id: 'Date' });
+        dataTable.addColumn({ type: 'number', id: 'Température' });
+
+        data.results.forEach(result => {
+          dataTable.addRow([new Date(result.Jour * 1000), result.temp]);
+        });
+
+        var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
+
+        var options = {
+          title: "Températures à Paris",
+          height: 350,
+        };
+
+        chart.draw(dataTable, options);
       }
     </script>
-</body>
+  </head>
+  <body>
+    <div id="calendar_basic" style="width: 1000px; height: 350px;"></div>
+  </body>
 </html>
+
