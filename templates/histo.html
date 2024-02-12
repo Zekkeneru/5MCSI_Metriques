@@ -16,11 +16,11 @@
       function drawChart(data) {
         var dataTable = new google.visualization.DataTable();
         dataTable.addColumn({ type: 'date', id: 'Date' });
-        dataTable.addColumn({ type: 'string', id: 'Température' });
+        dataTable.addColumn({ type: 'number', id: 'Température' });
 
         data.results.forEach(result => {
-          var temperature = result.temp.toFixed(2) + '°'; 
-          dataTable.addRow([new Date(result.Jour * 1000), temperature]);
+          var temperature = result.temp.toFixed(2); 
+          dataTable.addRow([new Date(result.Jour * 1000), parseFloat(temperature)]);
         });
 
         var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
@@ -29,10 +29,10 @@
           title: "Températures à Paris",
           height: 350,
           calendar: {
-            cellSize: 20, 
+            cellSize: 20, // 
           },
           colorAxis: {
-            minValue: data.results.reduce((min, result) => Math.min(min, result.temp), Infinity),
+            minValue: data.results.reduce((min, result) => Math.min(min, result.temp), Infinity), 
             maxValue: data.results.reduce((max, result) => Math.max(max, result.temp), -Infinity), 
             colors: ['#c7e9b4', '#41b6c4'] 
           },
