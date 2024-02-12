@@ -19,7 +19,8 @@
         dataTable.addColumn({ type: 'number', id: 'Température' });
 
         data.results.forEach(result => {
-          dataTable.addRow([new Date(result.Jour * 1000), result.temp]);
+          var temperature = result.temp.toFixed(2); 
+          dataTable.addRow([new Date(result.Jour * 1000), parseFloat(temperature)]);
         });
 
         var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
@@ -27,10 +28,11 @@
         var options = {
           title: "Températures à Paris",
           height: 350,
-          calendar: {
-            cellSize: 20, // Réduire la taille des cellules pour afficher tous les jours du mois de février
-          },
-          colorAxis: {colors: ['#3182bd', '#9ecae1', '#ffffbf', '#fd8d3c', '#e6550d']} // Palette de couleurs allant du bleu à l'orange
+          colorAxis: {
+            minValue: data.results.reduce((min, result) => Math.min(min, result.temp), Infinity), 
+            maxValue: data.results.reduce((max, result) => Math.max(max, result.temp), -Infinity), 
+            colors: ['#c7e9b4', '#41b6c4'] 
+          }
         };
 
         chart.draw(dataTable, options);
@@ -41,5 +43,3 @@
     <div id="calendar_basic" style="width: 1000px; height: 350px;"></div>
   </body>
 </html>
-
-
