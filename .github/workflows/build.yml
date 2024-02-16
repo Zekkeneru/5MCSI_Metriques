@@ -3,7 +3,7 @@ name: Build
 on:
   push:
     branches:
-      - 5MCSI_Metriques
+      - main
 
 
 jobs:
